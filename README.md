@@ -6,6 +6,8 @@ Repo: [github.com/dryleaftrace/Ink-and-Ivory](https://github.com/dryleaftrace/In
 
 **Live demo:** this Claude-powered version needs a server and your own API key, so it can't be hosted as a public link. If you just want to try the board itself, the sibling artifact — same engine, no Claude opponent, a classical search AI up to Grandmaster strength instead — is playable instantly, no setup: [claude.ai/code/artifact/b00eaea6-e6e4-4d6d-acc0-6d98222c6a0f](https://claude.ai/code/artifact/b00eaea6-e6e4-4d6d-acc0-6d98222c6a0f)
 
+Play it here: dryleaftrace.github.io/Ink-and-Ivory-web
+
 ## How it works
 
 The board, rules, and legality checking are the same validated engine from the shareable artifact. On Claude's turn, the server sends Claude the current position and the exact list of legal moves, and asks it to pick one and add a short comment. Claude's choice is checked against that list — if it ever returns something that isn't an exact match, the server asks again (up to 3 tries) and falls back to a random legal move rather than getting stuck, so Claude can never make an illegal move or break the game.
