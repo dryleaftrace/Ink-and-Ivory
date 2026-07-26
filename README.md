@@ -1,6 +1,8 @@
-# Ink & Ivory — Chess vs Claude
+# Ink & Ivory
 
 A local chess app where Claude actually plays the moves (not a classical search engine). This is a separate, local-only companion to the shareable "Ink & Ivory" chess artifact — it needs your own Anthropic API access and can't be published as a web link.
+
+Repo: [github.com/dryleaftrace/Ink-and-Ivory](https://github.com/dryleaftrace/Ink-and-Ivory)
 
 ## How it works
 
@@ -8,8 +10,10 @@ The board, rules, and legality checking are the same validated engine from the s
 
 ## Setup
 
-1. Install dependencies (already run once, but if you move this folder):
+1. Clone the repo and install dependencies:
    ```
+   git clone https://github.com/dryleaftrace/Ink-and-Ivory.git
+   cd Ink-and-Ivory
    npm install
    ```
 
