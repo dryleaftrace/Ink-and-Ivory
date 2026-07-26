@@ -1,12 +1,11 @@
 # Ink & Ivory
 
-A local chess app where Claude actually plays the moves (not a classical search engine). This is a separate, local-only companion to the shareable "Ink & Ivory" chess artifact — it needs your own Anthropic API access and can't be published as a web link.
+Two chess apps in one repo:
 
-Repo: [github.com/dryleaftrace/Ink-and-Ivory](https://github.com/dryleaftrace/Ink-and-Ivory)
+- **`docs/`** — a self-contained, single-file board. Play a friend locally, or against an alpha-beta search AI up to a Grandmaster tier. No server, no API key. **[Play it here](https://dryleaftrace.github.io/Ink-and-Ivory/)**.
+- **Everything else** (`server.js`, `engine.js`, `claude-move.js`, `public/`) — a local Node app where Claude actually plays the moves instead of a search engine. Needs your own Anthropic API key and a running server, so it isn't hosted — see Setup below.
 
-**Live demo:** this Claude-powered version needs a server and your own API key, so it can't be hosted as a public link. If you just want to try the board itself, the sibling artifact — same engine, no Claude opponent, a classical search AI up to Grandmaster strength instead — is playable instantly, no setup: [claude.ai/code/artifact/b00eaea6-e6e4-4d6d-acc0-6d98222c6a0f](https://claude.ai/code/artifact/b00eaea6-e6e4-4d6d-acc0-6d98222c6a0f)
-
-## How it works
+## How the Claude-powered version works
 
 The board, rules, and legality checking are the same validated engine from the shareable artifact. On Claude's turn, the server sends Claude the current position and the exact list of legal moves, and asks it to pick one and add a short comment. Claude's choice is checked against that list — if it ever returns something that isn't an exact match, the server asks again (up to 3 tries) and falls back to a random legal move rather than getting stuck, so Claude can never make an illegal move or break the game.
 
