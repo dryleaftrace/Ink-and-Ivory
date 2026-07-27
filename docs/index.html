@@ -836,8 +836,8 @@ let gameOver = false;
 let positionCounts = {};
 let pendingPromotion = null;
 
-const DEPTH = {easy:2, medium:3, hard:4, grandmaster:5};
-const MARGIN = {easy:75, medium:0, hard:0, grandmaster:0};
+const DEPTH = {easy:1, medium:2, hard:3, grandmaster:5};
+const MARGIN = {easy:200, medium:100, hard:40, grandmaster:0};
 
 /* AI search runs in a Web Worker so deep (slow) searches never freeze the board. */
 const WORKER_SRC = String.raw`
