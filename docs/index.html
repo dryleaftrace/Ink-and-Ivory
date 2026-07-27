@@ -256,8 +256,8 @@
     pointer-events:none;
     filter: drop-shadow(0 1px 0 rgba(0,0,0,0.18));
   }
-  .piece.white{ color: #F7F1E1; -webkit-text-stroke: 1px rgba(35,39,51,0.55); }
-  .piece.black{ color: #1c1e26; -webkit-text-stroke: 0.6px rgba(236,230,214,0.35); }
+  .piece.white{ color: #FFFFFF; -webkit-text-stroke: 1.5px #1a1a1a; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.45)); }
+  .piece.black{ color: #000000; -webkit-text-stroke: 1.5px #FFFFFF; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,0.55)); }
 
   .coord-corner{
     position:absolute;
@@ -794,7 +794,7 @@ function positionKey(game){
 }
 
 /* ---------------- Glyphs ---------------- */
-const WHITE_GLYPH = {K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙'};
+const WHITE_GLYPH = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 const BLACK_GLYPH = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 function glyphFor(piece){ return piece.c==='w' ? WHITE_GLYPH[piece.t] : BLACK_GLYPH[piece.t]; }
 
