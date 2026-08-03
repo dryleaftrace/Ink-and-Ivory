@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
 <meta charset="UTF-8" />
 <title>Ink &amp; Ivory — Chess</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,10 +17,10 @@
     --burgundy:#8B3A42;
     --burgundy-tint: rgba(139,58,66,0.18);
     --moss:#5C7A5E;
-    --square-light:#ECE6D6;
-    --square-dark:#3b3f4d;
-    --square-light-text:#3b3f4d;
-    --square-dark-text:#ECE6D6;
+    --square-light:#B4824C;
+    --square-dark:#1C1512;
+    --square-light-text:#2b1d10;
+    --square-dark-text:#d9bb8c;
     --shadow: 0 18px 40px -20px rgba(35,39,51,0.35);
     --radius: 10px;
     --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -45,10 +42,10 @@
       --burgundy:#c9636b;
       --burgundy-tint: rgba(201,99,107,0.22);
       --moss:#87ab89;
-      --square-light:#cfc7ae;
-      --square-dark:#262a35;
-      --square-light-text:#3b3f4d;
-      --square-dark-text:#cfc7ae;
+      --square-light:#B4824C;
+      --square-dark:#1C1512;
+      --square-light-text:#2b1d10;
+      --square-dark-text:#d9bb8c;
       --shadow: 0 18px 44px -18px rgba(0,0,0,0.6);
     }
   }
@@ -57,7 +54,7 @@
     --text:#ECE6D6; --text-soft:#9a9fae; --border: rgba(236,230,214,0.13);
     --brass:#caa25f; --brass-strong:#e0b876; --brass-tint: rgba(202,162,95,0.22);
     --burgundy:#c9636b; --burgundy-tint: rgba(201,99,107,0.22); --moss:#87ab89;
-    --square-light:#cfc7ae; --square-dark:#262a35; --square-light-text:#3b3f4d; --square-dark-text:#cfc7ae;
+    --square-light:#B4824C; --square-dark:#1C1512; --square-light-text:#2b1d10; --square-dark-text:#d9bb8c;
     --shadow: 0 18px 44px -18px rgba(0,0,0,0.6);
   }
   :root[data-theme="light"]{
@@ -65,7 +62,7 @@
     --text:#232733; --text-soft:#63677a; --border: rgba(35,39,51,0.14);
     --brass:#a8793a; --brass-strong:#8c6329; --brass-tint: rgba(176,134,63,0.22);
     --burgundy:#8B3A42; --burgundy-tint: rgba(139,58,66,0.18); --moss:#5C7A5E;
-    --square-light:#ECE6D6; --square-dark:#3b3f4d; --square-light-text:#3b3f4d; --square-dark-text:#ECE6D6;
+    --square-light:#B4824C; --square-dark:#1C1512; --square-light-text:#2b1d10; --square-dark-text:#d9bb8c;
     --shadow: 0 18px 40px -20px rgba(35,39,51,0.35);
   }
 
@@ -211,8 +208,20 @@
     cursor:pointer;
     user-select:none;
   }
-  .square.light{ background: var(--square-light); }
-  .square.dark{ background: var(--square-dark); }
+  .square.light{
+    background-color: var(--square-light);
+    background-image:
+      repeating-linear-gradient(91deg, rgba(255,235,205,0.10) 0px, rgba(255,235,205,0.10) 1px, transparent 1px, transparent 5px),
+      repeating-linear-gradient(91deg, rgba(60,32,10,0.12) 0px, rgba(60,32,10,0.12) 2px, transparent 2px, transparent 11px),
+      linear-gradient(155deg, rgba(255,255,255,0.08), transparent 40%);
+  }
+  .square.dark{
+    background-color: var(--square-dark);
+    background-image:
+      repeating-linear-gradient(91deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 6px),
+      repeating-linear-gradient(91deg, rgba(0,0,0,0.35) 0px, rgba(0,0,0,0.35) 2px, transparent 2px, transparent 12px),
+      linear-gradient(155deg, rgba(255,255,255,0.04), transparent 40%);
+  }
 
   .square::before{
     content:"";
@@ -398,15 +407,28 @@
   .promo-choices button:hover{ border-color: var(--brass); }
   .modal p.sub{ color: var(--text-soft); font-size:13px; margin: 0 0 16px; }
 
+  .modal.rules-modal{ max-width: 460px; max-height: 80vh; overflow-y: auto; text-align: left; }
+  .modal.rules-modal h3{ text-align: center; }
+  .modal.rules-modal h4{
+    font-family: var(--font-display);
+    color: var(--brass-strong);
+    font-size: 14px;
+    margin: 16px 0 4px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+  }
+  .modal.rules-modal h4:first-of-type{ margin-top: 2px; }
+  .modal.rules-modal p{ color: var(--text-soft); font-size: 13px; line-height: 1.6; margin: 0 0 4px; }
+  .modal.rules-modal .btn{ margin-top: 16px; width: 100%; }
+
   .footnote{ font-size:11.5px; color: var(--text-soft); text-align:center; margin-top: 22px; }
 </style>
-</head>
-<body>
 
 <div class="app">
   <header class="masthead">
     <h1>Ink <span class="amp">&amp;</span> Ivory</h1>
     <div class="tagline">a quiet board — you against the machine</div>
+    <button class="btn btn-outline" id="rulesBtn" style="padding:6px 12px; font-size:12px;">How to Play</button>
   </header>
 
   <main class="layout">
@@ -484,6 +506,21 @@
     <h3>Choose promotion</h3>
     <p class="sub">Your pawn has reached the last rank.</p>
     <div class="promo-choices" id="promoChoices"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="rulesOverlay">
+  <div class="modal rules-modal">
+    <h3>How to Play</h3>
+    <h4>The Basics</h4>
+    <p>Standard chess rules. White moves first, then players alternate. Each piece moves and captures according to its usual pattern — pawns, knights, bishops, rooks, queens, and kings all behave as in the standard game.</p>
+    <h4>Special Moves</h4>
+    <p>Castling, en passant, and pawn promotion are all implemented. When a pawn reaches the last rank you'll be asked to choose its new piece.</p>
+    <h4>Check &amp; Checkmate</h4>
+    <p>A king in check must be moved out of danger, blocked, or the attacker captured. Checkmate — a check with no way out — ends the game. A position with no legal moves and no check is a stalemate, a draw.</p>
+    <h4>The Opponent</h4>
+    <p>The engine searches moves ahead using alpha-beta pruning. Set how deep it looks with the Difficulty selector — deeper search plays stronger, but takes longer to think.</p>
+    <button class="btn btn-outline" id="rulesCloseBtn">Close</button>
   </div>
 </div>
 
@@ -1485,6 +1522,12 @@ function resetGame(){
   }
 }
 
+const rulesOverlay = document.getElementById('rulesOverlay');
+document.getElementById('rulesBtn').addEventListener('click', () => rulesOverlay.classList.remove('hidden'));
+document.getElementById('rulesCloseBtn').addEventListener('click', () => rulesOverlay.classList.add('hidden'));
+rulesOverlay.addEventListener('click', (e) => { if (e.target === rulesOverlay) rulesOverlay.classList.add('hidden'); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') rulesOverlay.classList.add('hidden'); });
+
 newGameBtn.addEventListener('click', resetGame);
 endNewGameBtn.addEventListener('click', resetGame);
 
@@ -1528,5 +1571,3 @@ diffSeg.addEventListener('click', (e)=>{
 
 render();
 </script>
-</body>
-</html>
