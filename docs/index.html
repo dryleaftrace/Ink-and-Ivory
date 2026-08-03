@@ -376,6 +376,29 @@
   .history-row span.mv.current{ background: var(--brass-tint); font-weight:700; }
   .history-empty{ color: var(--text-soft); font-size:12.5px; font-style:italic; }
 
+  .field-row input[type="text"], .field-row input[type="password"] {
+    background: var(--panel-bg-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 13px;
+  }
+  .mp-note { font-size: 12.5px; color: var(--text-soft); font-style: italic; }
+  .mp-games-list { margin-top: 10px; }
+  .mp-game-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 12.5px;
+    border-bottom: 1px dotted var(--border);
+  }
+  .mp-game-row .btn { padding: 4px 10px; font-size: 11px; flex-shrink: 0; }
+  .mp-status-line { font-size: 12.5px; color: var(--text-soft); margin-top: 8px; }
+
   .modal-overlay{
     position:fixed; inset:0;
     background: rgba(20,20,24,0.55);
@@ -407,20 +430,6 @@
   .promo-choices button:hover{ border-color: var(--brass); }
   .modal p.sub{ color: var(--text-soft); font-size:13px; margin: 0 0 16px; }
 
-  .modal.rules-modal{ max-width: 460px; max-height: 80vh; overflow-y: auto; text-align: left; }
-  .modal.rules-modal h3{ text-align: center; }
-  .modal.rules-modal h4{
-    font-family: var(--font-display);
-    color: var(--brass-strong);
-    font-size: 14px;
-    margin: 16px 0 4px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 4px;
-  }
-  .modal.rules-modal h4:first-of-type{ margin-top: 2px; }
-  .modal.rules-modal p{ color: var(--text-soft); font-size: 13px; line-height: 1.6; margin: 0 0 4px; }
-  .modal.rules-modal .btn{ margin-top: 16px; width: 100%; }
-
   .footnote{ font-size:11.5px; color: var(--text-soft); text-align:center; margin-top: 22px; }
 </style>
 
@@ -428,7 +437,6 @@
   <header class="masthead">
     <h1>Ink <span class="amp">&amp;</span> Ivory</h1>
     <div class="tagline">a quiet board — you against the machine</div>
-    <button class="btn btn-outline" id="rulesBtn" style="padding:6px 12px; font-size:12px;">How to Play</button>
   </header>
 
   <main class="layout">
@@ -476,6 +484,49 @@
         </div>
       </div>
 
+      <div class="panel-section" id="mpCard">
+        <h2>Multiplayer</h2>
+        <div id="mpUnavailable" style="display:none">
+          <p class="mp-note">Multiplayer needs the local server running — see server/README.md.</p>
+        </div>
+        <div id="mpSignedOut" style="display:none">
+          <div class="field-row" style="margin-top:0">
+            <label>Username</label>
+            <input type="text" id="mpUsername" autocomplete="username">
+          </div>
+          <div class="field-row">
+            <label>Password</label>
+            <input type="password" id="mpPassword" autocomplete="current-password">
+          </div>
+          <div class="mp-status-line" id="mpAuthStatus"></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="mpSignInBtn">Sign In</button>
+            <button class="btn btn-outline" id="mpSignUpBtn">Sign Up</button>
+          </div>
+        </div>
+        <div id="mpSignedIn" style="display:none">
+          <div class="mp-status-line">Signed in as <span id="mpWhoAmI"></span></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="mpNewGameBtn">New Multiplayer Game</button>
+            <button class="btn btn-outline" id="mpSignOutBtn">Sign Out</button>
+          </div>
+          <div class="field-row">
+            <label>Join with Game ID</label>
+            <div class="btn-row">
+              <input type="text" id="mpJoinId" placeholder="e.g. 14">
+              <button class="btn btn-outline" id="mpJoinBtn">Join</button>
+            </div>
+          </div>
+          <div class="mp-games-list" id="mpGamesList"></div>
+        </div>
+        <div id="mpInGame" style="display:none">
+          <div class="mp-status-line" id="mpGameStatusLine"></div>
+          <div class="btn-row">
+            <button class="btn btn-outline" id="mpLeaveBtn">Leave Multiplayer</button>
+          </div>
+        </div>
+      </div>
+
       <div class="panel-section">
         <h2>Captured</h2>
         <div class="captures">
@@ -506,21 +557,6 @@
     <h3>Choose promotion</h3>
     <p class="sub">Your pawn has reached the last rank.</p>
     <div class="promo-choices" id="promoChoices"></div>
-  </div>
-</div>
-
-<div class="modal-overlay hidden" id="rulesOverlay">
-  <div class="modal rules-modal">
-    <h3>How to Play</h3>
-    <h4>The Basics</h4>
-    <p>Standard chess rules. White moves first, then players alternate. Each piece moves and captures according to its usual pattern — pawns, knights, bishops, rooks, queens, and kings all behave as in the standard game.</p>
-    <h4>Special Moves</h4>
-    <p>Castling, en passant, and pawn promotion are all implemented. When a pawn reaches the last rank you'll be asked to choose its new piece.</p>
-    <h4>Check &amp; Checkmate</h4>
-    <p>A king in check must be moved out of danger, blocked, or the attacker captured. Checkmate — a check with no way out — ends the game. A position with no legal moves and no check is a stalemate, a draw.</p>
-    <h4>The Opponent</h4>
-    <p>The engine searches moves ahead using alpha-beta pruning. Set how deep it looks with the Difficulty selector — deeper search plays stronger, but takes longer to think.</p>
-    <button class="btn btn-outline" id="rulesCloseBtn">Close</button>
   </div>
 </div>
 
@@ -1390,6 +1426,7 @@ function refreshLegalTargetsFor(boardIdx){
 }
 
 function isHumanTurn(){
+  if (mp.gameId) return mp.status === 'active' && game.turn === mpColor;
   return game.turn !== aiColor;
 }
 
@@ -1434,6 +1471,16 @@ async function finishMoveFlow(move){
     endSub.textContent = sub;
     endOverlay.classList.remove('hidden');
     render();
+    if (mp.gameId) {
+      const result = title === 'Checkmate' ? roleForColor(opp(game.turn)) : 'draw';
+      mpPushMove(true, result);
+      mpStopPolling();
+    }
+    return;
+  }
+
+  if (mp.gameId) {
+    mpPushMove(false, null);
     return;
   }
 
@@ -1522,16 +1569,295 @@ function resetGame(){
   }
 }
 
-const rulesOverlay = document.getElementById('rulesOverlay');
-document.getElementById('rulesBtn').addEventListener('click', () => rulesOverlay.classList.remove('hidden'));
-document.getElementById('rulesCloseBtn').addEventListener('click', () => rulesOverlay.classList.add('hidden'));
-rulesOverlay.addEventListener('click', (e) => { if (e.target === rulesOverlay) rulesOverlay.classList.add('hidden'); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') rulesOverlay.classList.add('hidden'); });
+// ---------------- Multiplayer ----------------
+const GAME_TYPE = 'ink-ivory';
+let mp = { user: null, gameId: null, role: null, status: null, version: 0, opponentName: null, pollTimer: null };
+let mpColor = 'w'; // this client's assigned color when mp.gameId is set
 
-newGameBtn.addEventListener('click', resetGame);
-endNewGameBtn.addEventListener('click', resetGame);
+function roleForColor(c) { return c === 'w' ? 'a' : 'b'; }
+
+const mpEls = {
+  unavailable: document.getElementById('mpUnavailable'),
+  signedOut: document.getElementById('mpSignedOut'),
+  signedIn: document.getElementById('mpSignedIn'),
+  inGame: document.getElementById('mpInGame'),
+  username: document.getElementById('mpUsername'),
+  password: document.getElementById('mpPassword'),
+  authStatus: document.getElementById('mpAuthStatus'),
+  whoAmI: document.getElementById('mpWhoAmI'),
+  joinId: document.getElementById('mpJoinId'),
+  gamesList: document.getElementById('mpGamesList'),
+  gameStatusLine: document.getElementById('mpGameStatusLine')
+};
+
+async function mpApi(path, opts) {
+  opts = opts || {};
+  const res = await fetch(path, {
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: opts.body ? { 'Content-Type': 'application/json' } : undefined,
+    ...opts
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((data && data.error) || res.statusText);
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+function mpShow(which) {
+  mpEls.unavailable.style.display = which === 'unavailable' ? '' : 'none';
+  mpEls.signedOut.style.display = which === 'signedOut' ? '' : 'none';
+  mpEls.signedIn.style.display = which === 'signedIn' ? '' : 'none';
+  mpEls.inGame.style.display = which === 'inGame' ? '' : 'none';
+}
+
+async function mpInit() {
+  try {
+    const data = await mpApi('/api/me');
+    mp.user = data.user;
+    mpEls.whoAmI.textContent = mp.user.username;
+    mpShow('signedIn');
+    mpRefreshGamesList();
+  } catch (err) {
+    if (err.status === 401) {
+      mp.user = null;
+      mpShow('signedOut');
+    } else {
+      mpShow('unavailable');
+    }
+  }
+}
+
+async function mpSignIn() {
+  mpEls.authStatus.textContent = '';
+  try {
+    const data = await mpApi('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ username: mpEls.username.value.trim(), password: mpEls.password.value })
+    });
+    mp.user = data.user;
+    mpEls.whoAmI.textContent = mp.user.username;
+    mpShow('signedIn');
+    mpRefreshGamesList();
+  } catch (err) {
+    mpEls.authStatus.textContent = err.message;
+  }
+}
+
+async function mpSignUp() {
+  mpEls.authStatus.textContent = '';
+  try {
+    const data = await mpApi('/api/signup', {
+      method: 'POST',
+      body: JSON.stringify({ username: mpEls.username.value.trim(), password: mpEls.password.value })
+    });
+    mp.user = data.user;
+    mpEls.whoAmI.textContent = mp.user.username;
+    mpShow('signedIn');
+    mpRefreshGamesList();
+  } catch (err) {
+    mpEls.authStatus.textContent = err.message;
+  }
+}
+
+async function mpSignOut() {
+  try { await mpApi('/api/logout', { method: 'POST' }); } catch (e) {}
+  mp.user = null;
+  mpLeaveGame();
+  mpShow('signedOut');
+}
+
+async function mpRefreshGamesList() {
+  try {
+    const data = await mpApi('/api/games');
+    mpEls.gamesList.innerHTML = '';
+    const relevant = data.games.filter(g => g.gameType === GAME_TYPE && g.status !== 'finished');
+    if (relevant.length === 0) {
+      mpEls.gamesList.innerHTML = '<div class="mp-note">No open games. Start one, or join a friend\'s.</div>';
+      return;
+    }
+    relevant.forEach(g => {
+      const row = document.createElement('div');
+      row.className = 'mp-game-row';
+      const opp2 = g.playerB ? (g.playerA.id === mp.user.id ? g.playerB.username : g.playerA.username) : '(waiting)';
+      const label = g.status === 'waiting' ? `#${g.id} — waiting for opponent` : `#${g.id} vs ${opp2}${g.yourTurn ? ' — your turn' : ''}`;
+      const span = document.createElement('span');
+      span.textContent = label;
+      row.appendChild(span);
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-outline';
+      btn.textContent = 'Resume';
+      btn.onclick = () => mpEnterGame(g.id);
+      row.appendChild(btn);
+      mpEls.gamesList.appendChild(row);
+    });
+  } catch (err) {
+    // the list is a nicety; ignore failures
+  }
+}
+
+async function mpNewGame() {
+  try {
+    const data = await mpApi('/api/games', { method: 'POST', body: JSON.stringify({ gameType: GAME_TYPE }) });
+    mpEnterGame(data.game.id, data.game);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function mpJoinGame() {
+  const id = mpEls.joinId.value.trim();
+  if (!id) return;
+  try {
+    const data = await mpApi('/api/games/' + id + '/join', { method: 'POST' });
+    mpEnterGame(data.game.id, data.game);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function mpEnterGame(id, gameData) {
+  mp.gameId = id;
+  const g = gameData || (await mpApi('/api/games/' + id)).game;
+  mp.role = g.playerA.id === mp.user.id ? 'a' : 'b';
+  mp.version = g.version;
+  mp.status = g.status;
+  mp.opponentName = mp.role === 'a' ? (g.playerB ? g.playerB.username : null) : g.playerA.username;
+
+  mpColor = mp.role === 'a' ? 'w' : 'b';
+  aiThinking = false;
+  animating = false;
+  selected = null;
+  legalTargets = [];
+  sanHistory = [];
+  positionCounts = {};
+  gameOver = false;
+  endOverlay.classList.add('hidden');
+
+  if (g.state && g.state.board) {
+    game = { board: g.state.board, turn: g.state.turn, castling: g.state.castling, ep: g.state.ep, halfmove: g.state.halfmove, fullmove: g.state.fullmove, history: [] };
+  } else {
+    game = newGame();
+  }
+
+  mpShow('inGame');
+  mpUpdateGameStatusLine(g);
+  render();
+  mpStartPolling();
+}
+
+function mpUpdateGameStatusLine(g) {
+  if (g.status === 'waiting') {
+    mpEls.gameStatusLine.textContent = 'Waiting for an opponent to join. Game ID: ' + g.id;
+  } else if (g.status === 'finished') {
+    mpEls.gameStatusLine.textContent = 'Game #' + g.id + ' is over.';
+  } else {
+    mpEls.gameStatusLine.textContent = 'Playing #' + g.id + ' vs ' + (mp.opponentName || '...') + '.';
+  }
+}
+
+function mpLeaveGame() {
+  mpStopPolling();
+  mp.gameId = null;
+  mp.role = null;
+  mp.status = null;
+  mpShow(mp.user ? 'signedIn' : 'signedOut');
+  if (mp.user) mpRefreshGamesList();
+  resetGame();
+}
+
+function mpStartPolling() {
+  mpStopPolling();
+  mp.pollTimer = setInterval(mpPoll, 2500);
+}
+function mpStopPolling() {
+  if (mp.pollTimer) { clearInterval(mp.pollTimer); mp.pollTimer = null; }
+}
+
+async function mpPoll() {
+  if (!mp.gameId) return;
+  try {
+    const data = await mpApi('/api/games/' + mp.gameId);
+    mpApplyRemote(data.game);
+  } catch (err) {
+    console.error('mpPoll failed:', err);
+  }
+}
+
+function mpApplyRemote(g) {
+  const statusChanged = g.status !== mp.status;
+  mp.status = g.status;
+
+  if (!mp.opponentName && g.playerB) {
+    mp.opponentName = mp.role === 'a' ? g.playerB.username : g.playerA.username;
+  }
+
+  mpUpdateGameStatusLine(g);
+
+  if (g.version === mp.version && !statusChanged) return;
+  mp.version = g.version;
+
+  if (g.status === 'waiting') return;
+
+  // g.state is still {} until the first move is made — both clients
+  // compute the same deterministic starting position locally, so there's
+  // nothing to hydrate yet.
+  if (g.state && g.state.board) {
+    game = { board: g.state.board, turn: g.state.turn, castling: g.state.castling, ep: g.state.ep, halfmove: g.state.halfmove, fullmove: g.state.fullmove, history: [] };
+  }
+  selected = null;
+  legalTargets = [];
+
+  if (g.status === 'finished') {
+    mpStopPolling();
+    gameOver = true;
+    const iWon = g.result === mp.role;
+    const draw = g.result === 'draw';
+    endTitle.textContent = draw ? 'Draw' : 'Checkmate';
+    endSub.textContent = draw ? 'The game is drawn.' : (iWon ? 'You win.' : 'The opponent wins.');
+    endOverlay.classList.remove('hidden');
+    render();
+    return;
+  }
+
+  render();
+}
+
+async function mpPushMove(finished, resultLetter) {
+  try {
+    const body = {
+      state: { board: game.board, turn: game.turn, castling: game.castling, ep: game.ep, halfmove: game.halfmove, fullmove: game.fullmove },
+      expectedVersion: mp.version
+    };
+    if (finished) { body.status = 'finished'; body.result = resultLetter; }
+    const data = await mpApi('/api/games/' + mp.gameId + '/state', { method: 'PUT', body: JSON.stringify(body) });
+    mp.version = data.game.version;
+  } catch (err) {
+    if (err.status === 409) {
+      mpPoll();
+    } else {
+      alert('Could not send your move: ' + err.message);
+    }
+  }
+}
+
+document.getElementById('mpSignInBtn').addEventListener('click', mpSignIn);
+document.getElementById('mpSignUpBtn').addEventListener('click', mpSignUp);
+document.getElementById('mpSignOutBtn').addEventListener('click', mpSignOut);
+document.getElementById('mpNewGameBtn').addEventListener('click', mpNewGame);
+document.getElementById('mpJoinBtn').addEventListener('click', mpJoinGame);
+document.getElementById('mpLeaveBtn').addEventListener('click', mpLeaveGame);
+
+newGameBtn.addEventListener('click', () => mp.gameId ? mpLeaveGame() : resetGame());
+endNewGameBtn.addEventListener('click', () => mp.gameId ? mpLeaveGame() : resetGame());
+mpInit();
 
 undoBtn.addEventListener('click', ()=>{
+  if (mp.gameId) { return; }
   if(game.history.length===0 || aiThinking || animating) return;
   gameOver = false;
   endOverlay.classList.add('hidden');
